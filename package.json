@@ -1,7 +1,7 @@
 {
   "name": "magpie-agent-deva",
   "version": "0.1.0",
-  "description": "Deva desktop as a magpie agent: pick one of magpie's models for it on the Agents page",
+  "description": "把 Deva 桌面版接进 magpie 的 Agent 列表：在 Agents 页勾选模型，插件写进 Deva 的配置",
   "type": "module",
   "main": "./index.mjs",
   "files": [
