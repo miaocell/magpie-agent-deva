@@ -1,6 +1,10 @@
 # magpie-agent-deva
 
+<a href="https://linux.do"><img src="https://img.shields.io/badge/LINUX%20DO-%E7%A4%BE%E5%8C%BA-FFB003?style=flat-square" alt="LINUX DO 社区" /></a>
+
 把 **Deva 桌面版**接进 [magpie](https://usemagpie.ai) 的 Agent 列表：在 magpie 的 Agent 页勾选 Deva 能用哪些路由组/模型，插件把它们写进 Deva；之后在 Deva 自己的模型列表里选一个用。断开时恢复原样。
+
+Deva 本身是开源的桌面 agent harness：[sqfcyily/deva](https://github.com/sqfcyily/deva)。
 
 ## 安装
 
