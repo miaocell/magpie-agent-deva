@@ -81,12 +81,22 @@ Deva 的「添加模型」会向网关请求 `/models`，而网关**按密钥过
 
 所以 Deva 在 magpie 那一行只有一个 `provider` 开关，模型在 Deva 里挑。
 
+## 为什么市场上它显示成「供应商」
+
+magpie 的插件市场会把没有 `main` 字段、只有 `magpie.agent` 的插件认作 Agent——社区里 `agent-pig`、`agent-aider`、`agent-delta` 都是这样，它们的描述文件里只有 `agent` 声明和 `connect()`，配置写入由 magpie 自己完成。
+
+Deva 做不到这一点。它的 `config.json` 里 provider 是一整个数组，插件要按勾选增删模型、记住哪些是自己加的、断开时还原，还要把网关密钥加密写进 `secrets.json`、写之前确认 Deva 没在运行。这些 magpie 的通用机制处理不了，只能有真正的运行时。
+
+而这个运行时就是 `package.json` 里的 `main`——它同时也是市场把插件判成「供应商」的原因。去掉它，描述文件里的代码跑不起来：magpie 的 moejs 沙箱没有 `setTimeout`，也没有 import hook，连 `node:fs` 都加载不了，只能求值 `agent` 声明和 `connect()`。
+
+两者不可兼得，插件选择了功能：**市场上它出现在「供应商」下面，实际仍是 Agent 插件**，装好后照常在 Agents 页出现、照常勾选模型。想看它是不是 Agent，`magpie ls` 里那一行就是（`Deva provider magpie ~\.deva\.magpie-agent.json`）。
+
 ## 文件
 
 | 文件 | 作用 |
 |---|---|
-| `deva.agent.js` | Agent 声明（跑在 magpie 的 moejs 里，只写 magpie 自己的记录文件） |
-| `index.mjs` | Bun 入口：轮询记录文件、检测 Deva 进程、合并写入 Deva 的 `config.json` |
+| `deva.agent.js` | Agent 声明（跑在 magpie 的 moejs 里，只声明 `agent` 和 `connect()`） |
+| `index.mjs` | Bun 入口：轮询记录文件、检测 Deva 进程、合并写入 Deva 的 `config.json`，由 `package.json` 的 `main` 启动 |
 | `lib/deva-config.mjs` | 纯函数：复用/新建供应商、同步模型列表、还原（有测试） |
 | `lib/deva-secrets.mjs` | 纯函数：按 Electron `safeStorage` 的方式加解密密钥（有测试） |
 | `lib/deva-files.mjs` | 路径解析、读写 JSON、检测 Deva 进程、取 `safeStorage` 主密钥 |
