@@ -20,6 +20,7 @@ import {
   devaRunning,
   files,
   readJson,
+  readProviderSecret,
   safeStorageKeyFromDisk,
   setProviderSecret,
   writeJson,
